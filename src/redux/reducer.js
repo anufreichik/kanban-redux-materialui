@@ -1,27 +1,24 @@
 const initialState = {
-  todos: [
-    {
-      title: 'First todo',
-      done: true,
-    }, {
-      title: 'Second todo',
-      done: false,
-    }
-  ]
+  cards: [],
+  columns:[]
 };
 
-const todo = (state = initialState, action) => {
+const kanban = (state = initialState, action) => {
   switch (action.type) {
-
-    case 'TODO_ADD':
+    case 'SET_CARDS':
       return {
         ...state,
-        todos: [...state.todos, { title: action.payload, done: false }]
-      };
+        cards:action.payload
+      }
+    case 'SET_COLUMNS':
+      return {
+        ...state,
+        columns:action.payload
+      }
 
     default:
       return state;
   }
 };
 
-export default todo;
+export default kanban;

@@ -1,9 +1,10 @@
 import { createStore, applyMiddleware} from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import todo from './reducer';
+import kanban from './reducer';
+import thunk from "redux-thunk";
 
-const store = createStore(todo, composeWithDevTools(
-  applyMiddleware(),
+const store = createStore(kanban, composeWithDevTools(
+  applyMiddleware(thunk),
 ));
 
 export default store;
