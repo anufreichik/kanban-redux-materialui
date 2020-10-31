@@ -4,6 +4,7 @@ import Header from "./Header";
 import {Grid} from '@material-ui/core'
 import KanbanBoard from "./KanbanBoard";
 import {getCards, getColumns} from "../redux/actions";
+import AddKanbanCard from "./AddKanbanCard";
 
 function App(props) {
    const {cards, columns}=props;
@@ -18,6 +19,7 @@ function App(props) {
     return (
         <Grid container direction='column'>
             <Grid item><Header/></Grid>
+            <Grid item xs={12} ><AddKanbanCard /></Grid>
             <Grid item container>
                 <Grid item xs={false} sm={1}/>
 

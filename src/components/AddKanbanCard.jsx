@@ -1,23 +1,22 @@
 import React, {useState} from 'react';
-import Icon from "@material-ui/core/Icon";
 import Button from "@material-ui/core/Button";
 import {Add} from "@material-ui/icons";
-import {Dialog, DialogTitle, DialogContentText, DialogContent, TextField, DialogActions} from "@material-ui/core";
-import {addCard, getCards, getColumns} from "../redux/actions";
+import {Dialog, DialogTitle,  DialogContent, TextField, DialogActions} from "@material-ui/core";
+import {addCard } from "../redux/actions";
 import {connect} from "react-redux";
 
 function AddKanbanCard(props) {
     const [open, setOpen] = React.useState(false);
     const [nameInput, setNameInput]=useState('');
     const [descriptionInput, setDescriptionInput]=useState('');
-    const [statusInput, setStatusInput]=useState(props.column.status);
+    const [statusInput, setStatusInput]=useState('todo');
 
     const addCardButtonHandler = ()=>{
         const card = {name:nameInput, description:descriptionInput, status:statusInput, priority:1}
         props.addCard(card);
         setNameInput('');
         setDescriptionInput('');
-        setStatusInput(props.column.status);
+        setStatusInput('todo');
         setOpen(false);
     }
 

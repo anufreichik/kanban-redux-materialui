@@ -70,3 +70,29 @@ export function moveCard(card, columns, val) {
             )
     }
 }
+
+export function updateCard(card) {
+    return (dispatch) => {
+
+        axios.patch(`https://nazarov-kanban-server.herokuapp.com/card/${card._id}`, {name:card.name, description:card.description})
+            .then(
+                (res) => dispatch(getCards())
+            )
+            .catch(
+                (err) => console.log(err, 'error')
+            )
+    }
+}
+
+export function changePriority(cardId, val) {
+    return (dispatch) => {
+
+        axios.patch(`https://nazarov-kanban-server.herokuapp.com/card/${cardId}`, {priority:val})
+            .then(
+                (res) => dispatch(getCards())
+            )
+            .catch(
+                (err) => console.log(err, 'error')
+            )
+    }
+}

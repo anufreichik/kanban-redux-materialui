@@ -20,9 +20,9 @@ const classes = useStyles();
                 <Typography variant="h6" className={classes.typographyStyles} >
                     Kanban Inc.
                 </Typography>
-                <FacebookIcon  fontSize={'medium'}/>
-                <LinkedInIcon fontSize={'medium'}/>
-               <YouTubeIcon fontSize={'medium'}/>
+                <FacebookIcon  />
+                <LinkedInIcon />
+               <YouTubeIcon />
             </Toolbar>
         </AppBar>
     );

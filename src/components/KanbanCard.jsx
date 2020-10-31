@@ -5,16 +5,16 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import {ArrowBack, ArrowForward, DoubleArrow} from "@material-ui/icons";
+import {ArrowBack, ArrowDownward, ArrowForward, ArrowUpward} from "@material-ui/icons";
 import Grid from "@material-ui/core/Grid";
-import {deleteCard, moveCard} from "../redux/actions";
+import {changePriority, deleteCard, moveCard, updateCard} from "../redux/actions";
 import {connect} from "react-redux";
+import UpdateKanbanCard from "./UpdateKanbanCard";
 
 const useStyles = makeStyles({
     root: {
@@ -38,25 +38,30 @@ function KanbanCard(props) {
     const {card} = props;
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const [openEditCardDialog, setOpenEditCardDialog] = useState(false);
     const handleClick = (event) => {
         console.log(event.currentTarget)
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
-
         setAnchorEl(null);
     };
     const handleDelete = (cardId) => {
         props.deleteCard(cardId);
         setAnchorEl(null);
     };
-    const handleEdit = () => {
 
+    const hideMenu = () => {
         setAnchorEl(null);
+    }
+    const handleEdit = () => {
+        setAnchorEl(null);
+        setOpenEditCardDialog(true);
     };
 
     const classes = useStyles();
     const bull = <span className={classes.bullet}>•</span>;
+
     return (
         <Card className={classes.root}>
             <CardContent>
@@ -72,6 +77,12 @@ function KanbanCard(props) {
                                         aria-controls="simple-menu">
                                 <MoreVertIcon/>
                             </IconButton>
+                            {
+                                openEditCardDialog &&
+                                <UpdateKanbanCard card={card} updateCard={props.updateCard} hideMenu={hideMenu}
+                                                  setOpenEditCardDialog={setOpenEditCardDialog}/>
+                            }
+
                             <Menu
                                 id="simple-menu"
                                 anchorEl={anchorEl}
@@ -89,18 +100,23 @@ function KanbanCard(props) {
                 />
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                     Priority- {card.priority}
+                    <IconButton aria-label="settings" onClick={() => props.updatePriority(card._id, card.priority - 1)}
+                                disabled={card.priority === 1}  >
+                        <ArrowUpward fontSize='small'/>
+                    </IconButton>
+                    <IconButton aria-label="settings" onClick={() => props.updatePriority(card._id, card.priority + 1)}
+                                disabled={card.priority === 10}  >
+                        <ArrowDownward fontSize='small'/>
+                    </IconButton>
                 </Typography>
-                {/*<Typography variant="body2" component="p">*/}
-                {/*    {card.description}*/}
-                {/*</Typography>*/}
             </CardContent>
             <CardActions>
                 <Grid container direction='row' justify='space-between' alignItems="center">
-                    <IconButton aria-label="settings" onClick={() => props.moveCard(card, props.columns, -1)}>
+                    <IconButton aria-label="settings" onClick={() => props.moveCard(card, props.columns, -1)}  disabled={props.isFirstColumn}>
                         <ArrowBack fontSize='small'/>
                     </IconButton>
 
-                    <IconButton aria-label="settings" onClick={() => props.moveCard(card, props.columns, 1)}>
+                    <IconButton aria-label="settings" onClick={() => props.moveCard(card, props.columns, 1)} disabled={props.isLastColumn}>
                         <ArrowForward fontSize='small'/>
                     </IconButton>
                 </Grid>
@@ -114,7 +130,9 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
     deleteCard: (cardId) => dispatch(deleteCard(cardId)),
-    moveCard: (card, columns, val) => dispatch(moveCard(card, columns, val))
+    moveCard: (card, columns, val) => dispatch(moveCard(card, columns, val)),
+    updateCard: (card) => dispatch(updateCard(card)),
+    updatePriority: (cardId, val) => dispatch(changePriority(cardId, val))
 });
 
 export default connect(
